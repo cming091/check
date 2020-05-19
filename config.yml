@@ -1,0 +1,676 @@
+# 数据库配置(mongodb)
+database:
+  username:
+  password:
+  authSource:
+  ip&port:
+  authMechanism:
+  dbname:
+
+neo4j:
+  uri:
+  username:
+  password:
+
+general:
+  mandt:
+  domain:
+
+invoice:
+  sleep: 0
+  collection: mkinvoices
+  pattern: {'mkstatus':{"$nin":[1]},'statusofrecbill':{"$in":[0,2]}}
+  show: {}
+  level: 1
+  id: id
+  pagesize: 200
+  nodeName: Invoice
+  orderfields: ['sale_contract_ids','delivery_order_ids']
+  fields: [
+    ['id','XBLNR','string'],
+    ['sale_contract_ids','htxx.contractno','list'],
+    ['delivery_order_ids','dnlist.dnno||savedata.VBELN_DN','list'],
+    ['invoice_customer_name','cusname','string'],
+    ['invoice_account','amountofsapkpzje','float'],
+    ['invoice_tax_account','amountofsapkpzse','float'],
+    ['red_invoice_account','redinvoice','float'],
+  ]
+
+payment:
+  sleep: 0
+  nodeName: Payment
+  level: 1
+  id: id
+  fields: [
+  ['id','ZSQNO','string'],
+  ['apply_pay_type','ZFKFS','string'],
+  ['pay_type','ZSJFKFS','string'],
+  ['apply_pay_amount','ZSQJE','float'],
+  ['pay_amount','ZSJFKJE','float'],
+  ['apply_pay_date','ZJHDAT','string'],
+  ['pay_date','ZSJDAT','string'],
+  ['pay_status','ZFKSTA','string'],
+  ['pay_combine_id','ZSQNO_HB','string'],
+  ['company_id','ZFKZT','string'],
+  ['pay_use','ZFKZL','string'],
+  ['emp_id','ZSQRID','string'],
+  ['emp_name','AUFUSER0','string'],
+  ['org_id','ZBMID','string'],
+  ['org_name','ZSQBM','string'],
+  ['division','ZBM','string'],
+  ['supplier_id','LIFNR','string'],
+  ['currency','WAERS','string'],
+  ['cost_center','KOSTL','string'],
+  ['profit_center','PRCTR','string'],
+  ['un_write_off_amount','ZWHXJE','float'],
+  ]
+  orderfields: []
+  url: "http://{}/sap/api/query/common?sap-client={}"
+  getPage: {
+    "SQL": "select count(a.ZSQNO) AS TOTAL  FROM ZVFI_CREDIT_HEAD a  WHERE a.MANDT = '%d' and  a.LOEVM <> 'X' ","FIELDS":[{"FIELDNAME": "TOTAL","FIELDTYPE":"menge_d"}]}
+  getMsg: {
+    "SQL": "select a.MANDT,a.ZSQNO,a.ZSQRQ,a.ZFKZT,a.AUFUSER0,a.ZSQBM,a.ZBM,a.ZFKZL,a.LIFNR,a.ZSKDW,a.ZYHMC_CN,a.ZYHZH,a.ZSQJE,a.ZWHXJE,a.ZFKFS,a.ZKZBANK,a.ZJHDAT,a.ZBZ,a.ZSJFKFS,a.ZSJFKJE,a.ZSJDAT,a.ZCTYPE,a.KOSTL,a.ZFKSTA,a.ZURL,a.ZURLNAM,a.WAERS,a.LOEVM,a.ZHBB,a.ZHB,a.ZHBFK,a.ZSQNO_HB,a.ZDFQK,a.ZCGSW,a.ZSQRID,a.ZBMID,a.PROVZ,a.ORT01,a.ZYHBZ,a.ZPRINTX,a.PRCTR FROM ZVFI_CREDIT_HEAD a  WHERE a.MANDT = '%d'  and  a.LOEVM <> 'X' order by ZSQRQ desc, ZSQNO desc  offset %d rows fetch next %d rows only",
+    "FIELDS":[
+      {"FIELDNAME": "MANDT","FIELDTYPE": "MANDT"},
+      {"FIELDNAME": "ZSQNO","FIELDTYPE": "ZESQNO"},
+      {"FIELDNAME": "ZSQRQ","FIELDTYPE": "ZESQRQ"},
+      {"FIELDNAME": "ZFKZT","FIELDTYPE": "ZEFKZT"},
+      {"FIELDNAME": "AUFUSER0","FIELDTYPE": "AUFUSER0"},
+      {"FIELDNAME": "ZSQBM","FIELDTYPE": "ZSQBM"},
+      {"FIELDNAME": "ZBM","FIELDTYPE": "ZEZJBM"},
+      {"FIELDNAME": "ZFKZL","FIELDTYPE": "ZEFKZL"},
+      {"FIELDNAME": "LIFNR","FIELDTYPE": "LIFNR"},
+      {"FIELDNAME": "ZSKDW","FIELDTYPE": "ZESKDW"},
+      {"FIELDNAME": "ZYHMC_CN","FIELDTYPE": "ZEYHMC_CN"},
+      {"FIELDNAME": "ZYHZH","FIELDTYPE": "ZEYHZH"},
+      {"FIELDNAME": "ZSQJE","FIELDTYPE": "ZESQJE"},
+      {"FIELDNAME": "ZWHXJE","FIELDTYPE": "ZEWHXJE"},
+      {"FIELDNAME": "ZFKFS","FIELDTYPE": "ZEFKFS"},
+      {"FIELDNAME": "ZKZBANK","FIELDTYPE": "ZEKZBANK"},
+      {"FIELDNAME": "ZJHDAT","FIELDTYPE": "ZEJHDAT"},
+      {"FIELDNAME": "ZBZ","FIELDTYPE": "ZEBZ"},
+      {"FIELDNAME": "ZSJFKFS", "FIELDTYPE": "ZESJFKFS"},
+      {"FIELDNAME": "ZSJFKJE","FIELDTYPE": "ZESJFKJE"},
+      {"FIELDNAME": "ZSJDAT","FIELDTYPE": "ZESJDAT"},
+      {"FIELDNAME": "ZCTYPE","FIELDTYPE": "ZECTYPE"},
+      {"FIELDNAME": "KOSTL","FIELDTYPE": "KOSTL"},
+      {"FIELDNAME": "ZFKSTA","FIELDTYPE": "ZEFKSTA"},
+      {"FIELDNAME": "ZURL","FIELDTYPE": "ZEURL"},
+      {"FIELDNAME": "ZURLNAM","FIELDTYPE": "ZEURLNAM"},
+      {"FIELDNAME": "WAERS","FIELDTYPE": "WAERS"},
+      { "FIELDNAME": "LOEVM","FIELDTYPE": "LOEVM_X"},
+      {"FIELDNAME": "ZHBB","FIELDTYPE": "ZEHBB"},
+      {"FIELDNAME": "ZHB","FIELDTYPE": "ZEHB"},
+      {"FIELDNAME": "ZHBFK","FIELDTYPE": "ZEHBFK"},
+      {"FIELDNAME": "ZSQNO_HB","FIELDTYPE": "ZESQNO_HB"},
+      {"FIELDNAME": "ZDFQK","FIELDTYPE": "ZEDFQK"},
+      {"FIELDNAME": "ZCGSW","FIELDTYPE": "ZECGSW"},
+      {"FIELDNAME": "ZSQRID","FIELDTYPE": "ZESQRID2"},
+      {"FIELDNAME": "ZBMID","FIELDTYPE": "ZEBMID"},
+      {"FIELDNAME": "PROVZ","FIELDTYPE": "REGIO"},
+      {"FIELDNAME": "ORT01","FIELDTYPE": "ORT01_GP"},
+      {"FIELDNAME": "ZYHBZ","FIELDTYPE": "ZEFI_YHBZ"},
+      {"FIELDNAME": "ZPRINTX","FIELDTYPE": "ZPRINTX"},
+      {"FIELDNAME":"PRCTR","FIELDTYPE":"PRCTR"}]}
+
+
+PayWithPurchase:
+  sleep: 0
+  nodeName: PayWithPurchase
+  level: 1
+  id: id
+  unique: ZSQNO
+  orderfields: []
+  sign: ','
+  fields: [
+  ['id','ZSQNO,EBELN,ZYWYF','string'],
+  ['payable_id','ZYWYF','string'],
+  ['payable_amount','ZYFJE','float'],
+  ['payable_category','ZYFLB','string'],
+  ['currency','WAERS','string'],
+  ['purchase_order_id','EBELN','string'],
+  ['pay_apply_id','ZSQNO','string'],
+  ['customer_order_id','ZZPO','string'],
+  ['purchase_org','EKORG','string'],
+  ['purchase_order_amount','ZPOJE','float'],
+  ['transport_manner','ZZYS','string'],
+  ['second_level_distributor_name','ZZEJ','string'],
+  ['apply_pay_amount','ZSQJE','float'],
+  ['product_line','ZZCP','string'],
+  ['delivery_date','ZZJHRQ','string'],
+  ['sales_order_id','ZZSDPO','string'],
+  ['supplier_order_id','ZZPO','string'],
+  ['purchase_order_type','BSART','string'],
+  ['purchase_group','EKGRP','string'],
+  ['purchase_order_supplier_id','LIFNR_PO','string'],
+  ['purchase_order_supplier_name','LIFNR_NAME','string'],
+  ['payable_supplier','LIFNR_YWYF','string'],
+  ['earliest_schedule_period','ZZZPCQ','string'],
+  ['pay_amount','ZSFJE','float'],
+  ['latest_schedule_period','ZZWPCQ','string'],
+  ['sale_contract_id','ZXSHT','string'],
+
+  ]
+  url: "http://{}/sap/api/query/common?sap-client={}"
+  getPage: {
+    "SQL": "select count(a.ZSQNO) AS TOTAL  FROM ZVFI_CREDIT_HEAD a  WHERE a.MANDT = '%d' and a.LOEVM <> 'X' ","FIELDS":[{"FIELDNAME": "TOTAL","FIELDTYPE":"menge_d"}]}
+  getMsg: {
+    "SQL": "select a.MANDT,a.ZSQNO,a.ZSQRQ,a.ZFKZT,a.AUFUSER0,a.ZSQBM,a.ZBM,a.ZFKZL,a.LIFNR,a.ZSKDW,a.ZYHMC_CN,a.ZYHZH,a.ZSQJE,a.ZWHXJE,a.ZFKFS,a.ZKZBANK,a.ZJHDAT,a.ZBZ,a.ZSJFKFS,a.ZSJFKJE,a.ZSJDAT,a.ZCTYPE,a.KOSTL,a.ZFKSTA,a.ZURL,a.ZURLNAM,a.WAERS,a.LOEVM,a.ZHBB,a.ZHB,a.ZHBFK,a.ZSQNO_HB,a.ZDFQK,a.ZCGSW,a.ZSQRID,a.ZBMID,a.PROVZ,a.ORT01,a.ZYHBZ,a.ZPRINTX,a.PRCTR FROM ZVFI_CREDIT_HEAD a  WHERE a.MANDT = '%d'  and a.LOEVM <> 'X' order by ZSQRQ desc, ZSQNO desc  offset %d rows fetch next %d rows only",
+    "FIELDS":[
+      {"FIELDNAME": "MANDT","FIELDTYPE": "MANDT"},
+      {"FIELDNAME": "ZSQNO","FIELDTYPE": "ZESQNO"},
+      {"FIELDNAME": "ZSQRQ","FIELDTYPE": "ZESQRQ"},
+      {"FIELDNAME": "ZFKZT","FIELDTYPE": "ZEFKZT"},
+      {"FIELDNAME": "AUFUSER0","FIELDTYPE": "AUFUSER0"},
+      {"FIELDNAME": "ZSQBM","FIELDTYPE": "ZSQBM"},
+      {"FIELDNAME": "ZBM","FIELDTYPE": "ZEZJBM"},
+      {"FIELDNAME": "ZFKZL","FIELDTYPE": "ZEFKZL"},
+      {"FIELDNAME": "LIFNR","FIELDTYPE": "LIFNR"},
+      {"FIELDNAME": "ZSKDW","FIELDTYPE": "ZESKDW"},
+      {"FIELDNAME": "ZYHMC_CN","FIELDTYPE": "ZEYHMC_CN"},
+      {"FIELDNAME": "ZYHZH","FIELDTYPE": "ZEYHZH"},
+      {"FIELDNAME": "ZSQJE","FIELDTYPE": "ZESQJE"},
+      {"FIELDNAME": "ZWHXJE","FIELDTYPE": "ZEWHXJE"},
+      {"FIELDNAME": "ZFKFS","FIELDTYPE": "ZEFKFS"},
+      {"FIELDNAME": "ZKZBANK","FIELDTYPE": "ZEKZBANK"},
+      {"FIELDNAME": "ZJHDAT","FIELDTYPE": "ZEJHDAT"},
+      {"FIELDNAME": "ZBZ","FIELDTYPE": "ZEBZ"},
+      {"FIELDNAME": "ZSJFKFS", "FIELDTYPE": "ZESJFKFS"},
+      {"FIELDNAME": "ZSJFKJE","FIELDTYPE": "ZESJFKJE"},
+      {"FIELDNAME": "ZSJDAT","FIELDTYPE": "ZESJDAT"},
+      {"FIELDNAME": "ZCTYPE","FIELDTYPE": "ZECTYPE"},
+      {"FIELDNAME": "KOSTL","FIELDTYPE": "KOSTL"},
+      {"FIELDNAME": "ZFKSTA","FIELDTYPE": "ZEFKSTA"},
+      {"FIELDNAME": "ZURL","FIELDTYPE": "ZEURL"},
+      {"FIELDNAME": "ZURLNAM","FIELDTYPE": "ZEURLNAM"},
+      {"FIELDNAME": "WAERS","FIELDTYPE": "WAERS"},
+      { "FIELDNAME": "LOEVM","FIELDTYPE": "LOEVM_X"},
+      {"FIELDNAME": "ZHBB","FIELDTYPE": "ZEHBB"},
+      {"FIELDNAME": "ZHB","FIELDTYPE": "ZEHB"},
+      {"FIELDNAME": "ZHBFK","FIELDTYPE": "ZEHBFK"},
+      {"FIELDNAME": "ZSQNO_HB","FIELDTYPE": "ZESQNO_HB"},
+      {"FIELDNAME": "ZDFQK","FIELDTYPE": "ZEDFQK"},
+      {"FIELDNAME": "ZCGSW","FIELDTYPE": "ZECGSW"},
+      {"FIELDNAME": "ZSQRID","FIELDTYPE": "ZESQRID2"},
+      {"FIELDNAME": "ZBMID","FIELDTYPE": "ZEBMID"},
+      {"FIELDNAME": "PROVZ","FIELDTYPE": "REGIO"},
+      {"FIELDNAME": "ORT01","FIELDTYPE": "ORT01_GP"},
+      {"FIELDNAME": "ZYHBZ","FIELDTYPE": "ZEFI_YHBZ"},
+      {"FIELDNAME": "ZPRINTX","FIELDTYPE": "ZPRINTX"},
+      {"FIELDNAME":"PRCTR","FIELDTYPE":"PRCTR"}]}
+  PayWithPurchase: {
+    "SQL": "select a.MANDT,a.ZSQNO, a.EBELN, a.ZYWYF,a.ZZSDPO,a.ZZPO,a.EKORG,a.ZPOJE,a.ZZYS,a.ZZEJ,a.ZSQJE,a.ZZCP,a.ZZJHRQ,a.ZSWRY,a.ZYFJE,a.BSART,a.EKGRP,a.LIFNR_PO,a.LIFNR_NAME,a.LIFNR_YWYF,a.ZYFLB,a.WAERS,a.ZZZPCQ,b.ZZWPCQ,b.ZSFJE,b.ZXSHT from ZVFI_CREDIT_PO a left join ZTFI_CREDIT_PO b on a.ZSQNO = b.ZSQNO and a.EBELN = b.EBELN and a.ZYWYF=b.ZYWYF where  a.MANDT = '%d' and a.ZSQNO = '%s' order by EBELN ",
+    "FIELDS":[
+    {"FIELDNAME": "MANDT","FIELDTYPE": "MANDT"},
+    {"FIELDNAME": "ZSQNO","FIELDTYPE": "ZESQNO"},
+    {"FIELDNAME": "EBELN","FIELDTYPE": "EBELN"},
+    {"FIELDNAME": "ZYWYF","FIELDTYPE": "ZEYWYF"},
+    {"FIELDNAME": "ZZSDPO","FIELDTYPE": "ZESDPO"},
+    {"FIELDNAME": "ZZPO","FIELDTYPE": "ZEPO"},
+    {"FIELDNAME": "EKORG","FIELDTYPE": "EKORG"},
+    {"FIELDNAME": "ZPOJE","FIELDTYPE": "ZEPOJE"},
+    {"FIELDNAME": "ZZYS","FIELDTYPE": "ZEYS"},
+    {"FIELDNAME": "ZZEJ","FIELDTYPE": "ZEEJ"},
+    {"FIELDNAME": "ZSQJE","FIELDTYPE": "ZESQJE"},
+    {"FIELDNAME": "ZZCP","FIELDTYPE": "ZECP"},
+    {"FIELDNAME": "ZZJHRQ","FIELDTYPE": "ZEJHRQ"},
+    {"FIELDNAME": "ZSWRY","FIELDTYPE": "ZESWRY"},
+    {"FIELDNAME": "ZYFJE","FIELDTYPE": "ZEYFJE"},
+    {"FIELDNAME": "BSART","FIELDTYPE": "ESART"},
+    {"FIELDNAME": "EKGRP","FIELDTYPE": "BKGRP"},
+    {"FIELDNAME": "LIFNR_PO","FIELDTYPE": "ELIFN"},
+    {"FIELDNAME": "LIFNR_NAME","FIELDTYPE": "NAME1_GP"},
+    {"FIELDNAME": "LIFNR_YWYF","FIELDTYPE": "LIFNR"},
+    {"FIELDNAME":"ZYFLB","FIELDTYPE":"ZYFLB"},
+    {"FIELDNAME":"WAERS","FIELDTYPE":"WAERS"},
+    {"FIELDNAME":"ZZZPCQ","FIELDTYPE":"ZEZZPCQ"},
+    {"FIELDNAME":"ZZWPCQ","FIELDTYPE":"ZEZWPCQ"},
+    {"FIELDNAME":"ZSFJE","FIELDTYPE":"ZESFJE"},
+    {"FIELDNAME":"ZXSHT","FIELDTYPE":"ZEXSHTL"},
+    ]}
+
+
+PayWithRebate:
+  sleep: 0
+  nodeName: PayWithRebate
+  level: 1
+  id: id
+  orderfields: []
+  unique: ZSQNO
+  sign: ','
+  fields: [
+  ['id','ZSQNO,ZSQNO_YF','string'],
+  ['serial_id','ZSQNO_YF','string'],
+  ['pay_apply_id','ZSQNO','string'],
+  ['rebate_amount','ZCDJE','float'],
+  ['rebate_type','ZCDLX','string'],
+  ['purchase_order_id','EBELN','string'],
+  ['supplier_order_id','ZZPO','string'],
+  ['supplier_code','LIFNR','string'],
+  ['pay_apply_order_id','ZSQNO_GZ','string'],
+  ['sales_order_id','VBELN','string'],
+  ]
+  url: "http://{}/sap/api/query/common?sap-client={}"
+  getPage: {
+    "SQL": "select count(a.ZSQNO) AS TOTAL  FROM ZVFI_CREDIT_HEAD a  WHERE a.MANDT = '%d' and a.LOEVM <> 'X' ","FIELDS":[{"FIELDNAME": "TOTAL","FIELDTYPE":"menge_d"}]}
+  getMsg: {
+    "SQL": "select a.MANDT,a.ZSQNO,a.ZSQRQ,a.ZFKZT,a.AUFUSER0,a.ZSQBM,a.ZBM,a.ZFKZL,a.LIFNR,a.ZSKDW,a.ZYHMC_CN,a.ZYHZH,a.ZSQJE,a.ZWHXJE,a.ZFKFS,a.ZKZBANK,a.ZJHDAT,a.ZBZ,a.ZSJFKFS,a.ZSJFKJE,a.ZSJDAT,a.ZCTYPE,a.KOSTL,a.ZFKSTA,a.ZURL,a.ZURLNAM,a.WAERS,a.LOEVM,a.ZHBB,a.ZHB,a.ZHBFK,a.ZSQNO_HB,a.ZDFQK,a.ZCGSW,a.ZSQRID,a.ZBMID,a.PROVZ,a.ORT01,a.ZYHBZ,a.ZPRINTX,a.PRCTR FROM ZVFI_CREDIT_HEAD a  WHERE a.MANDT = '%d'  and a.LOEVM <> 'X' order by ZSQRQ desc, ZSQNO desc  offset %d rows fetch next %d rows only",
+    "FIELDS":[
+      {"FIELDNAME": "MANDT","FIELDTYPE": "MANDT"},
+      {"FIELDNAME": "ZSQNO","FIELDTYPE": "ZESQNO"},
+      {"FIELDNAME": "ZSQRQ","FIELDTYPE": "ZESQRQ"},
+      {"FIELDNAME": "ZFKZT","FIELDTYPE": "ZEFKZT"},
+      {"FIELDNAME": "AUFUSER0","FIELDTYPE": "AUFUSER0"},
+      {"FIELDNAME": "ZSQBM","FIELDTYPE": "ZSQBM"},
+      {"FIELDNAME": "ZBM","FIELDTYPE": "ZEZJBM"},
+      {"FIELDNAME": "ZFKZL","FIELDTYPE": "ZEFKZL"},
+      {"FIELDNAME": "LIFNR","FIELDTYPE": "LIFNR"},
+      {"FIELDNAME": "ZSKDW","FIELDTYPE": "ZESKDW"},
+      {"FIELDNAME": "ZYHMC_CN","FIELDTYPE": "ZEYHMC_CN"},
+      {"FIELDNAME": "ZYHZH","FIELDTYPE": "ZEYHZH"},
+      {"FIELDNAME": "ZSQJE","FIELDTYPE": "ZESQJE"},
+      {"FIELDNAME": "ZWHXJE","FIELDTYPE": "ZEWHXJE"},
+      {"FIELDNAME": "ZFKFS","FIELDTYPE": "ZEFKFS"},
+      {"FIELDNAME": "ZKZBANK","FIELDTYPE": "ZEKZBANK"},
+      {"FIELDNAME": "ZJHDAT","FIELDTYPE": "ZEJHDAT"},
+      {"FIELDNAME": "ZBZ","FIELDTYPE": "ZEBZ"},
+      {"FIELDNAME": "ZSJFKFS", "FIELDTYPE": "ZESJFKFS"},
+      {"FIELDNAME": "ZSJFKJE","FIELDTYPE": "ZESJFKJE"},
+      {"FIELDNAME": "ZSJDAT","FIELDTYPE": "ZESJDAT"},
+      {"FIELDNAME": "ZCTYPE","FIELDTYPE": "ZECTYPE"},
+      {"FIELDNAME": "KOSTL","FIELDTYPE": "KOSTL"},
+      {"FIELDNAME": "ZFKSTA","FIELDTYPE": "ZEFKSTA"},
+      {"FIELDNAME": "ZURL","FIELDTYPE": "ZEURL"},
+      {"FIELDNAME": "ZURLNAM","FIELDTYPE": "ZEURLNAM"},
+      {"FIELDNAME": "WAERS","FIELDTYPE": "WAERS"},
+      { "FIELDNAME": "LOEVM","FIELDTYPE": "LOEVM_X"},
+      {"FIELDNAME": "ZHBB","FIELDTYPE": "ZEHBB"},
+      {"FIELDNAME": "ZHB","FIELDTYPE": "ZEHB"},
+      {"FIELDNAME": "ZHBFK","FIELDTYPE": "ZEHBFK"},
+      {"FIELDNAME": "ZSQNO_HB","FIELDTYPE": "ZESQNO_HB"},
+      {"FIELDNAME": "ZDFQK","FIELDTYPE": "ZEDFQK"},
+      {"FIELDNAME": "ZCGSW","FIELDTYPE": "ZECGSW"},
+      {"FIELDNAME": "ZSQRID","FIELDTYPE": "ZESQRID2"},
+      {"FIELDNAME": "ZBMID","FIELDTYPE": "ZEBMID"},
+      {"FIELDNAME": "PROVZ","FIELDTYPE": "REGIO"},
+      {"FIELDNAME": "ORT01","FIELDTYPE": "ORT01_GP"},
+      {"FIELDNAME": "ZYHBZ","FIELDTYPE": "ZEFI_YHBZ"},
+      {"FIELDNAME": "ZPRINTX","FIELDTYPE": "ZPRINTX"},
+      {"FIELDNAME":"PRCTR","FIELDTYPE":"PRCTR"}]}
+  PayWithRebate: {
+    "SQL": "select MANDT,ZSQNO,ZSQNO_YF,ZCDJE,ZCDLX,EBELN,ZZPO,LIFNR,ZSQNO_GZ,VBELN from ZVFI_CREDIT_HX where  MANDT = '%d' and ZSQNO = '%s' order by EBELN ",
+    "FIELDS":[
+    {"FIELDNAME": "MANDT","FIELDTYPE": "MANDT"},
+    {"FIELDNAME": "ZSQNO","FIELDTYPE": "ZESQNO"},
+    {"FIELDNAME": "ZSQNO_YF","FIELDTYPE": "ZESQNO_YF"},
+    {"FIELDNAME": "ZCDJE","FIELDTYPE": "ZECDJE"},
+    {"FIELDNAME": "ZCDLX","FIELDTYPE": "ZECDLX"},
+    {"FIELDNAME": "EBELN","FIELDTYPE": "EBELN"},
+    {"FIELDNAME": "ZZPO","FIELDTYPE": "ZEPO"},
+    {"FIELDNAME": "LIFNR","FIELDTYPE": "LIFNR"},
+    {"FIELDNAME": "ZSQNO_GZ","FIELDTYPE": "ZESQNO"},
+    {"FIELDNAME": "VBELN","FIELDTYPE": "VBELN_VA"},]}
+
+
+purchaseorder:
+  sleep: 0
+  nodeName: PurchaseOrder
+  orderfields: []
+  show: {'_id':0,'code':1,'fullcode':1}
+  level: 1
+  id: id
+  unique: ['EBELN','sap_code','code']
+  pattern: {'doc_info.doc_status':{"$in":['valid']}}
+  collection: purchasecontacts
+  fields: [
+    ['id','EBELN','string'],
+    #['contract_code','code','string'],
+    #['contract_fullcode','fullcode','string'],
+    ['supplier_order_id','ZZPO','string'],
+    ['supplier_id','LIFNR','string'],
+    ['type','BSART','string'],
+    ['transport','ZZYS','string'],
+    ['product_line','ZZCP','string'],
+    ['currency','WAERS','string'],
+    ['purchase_org','EKORG','string'],
+    ['company_id','BUKRS','string'],
+    ['amount','ZZZJY','float'],
+    ['emp_name','ERNAM','string'],
+    ['device_rebate','ZZSBFD','float'],
+    ['service_rebate','ZZFWFD','float'],
+    ['device_amount','ZSBZJE','float'],
+    ['service_amount','ZFWZJE','float'],
+
+    ]
+  url: "http://{}/sap/api/query/common?sap-client={}"
+  getPage: {
+    "SQL":"SELECT COUNT(*) AS TOTAL FROM ZVMM_PO_HEADER WHERE MANDT = '%d' and ZZSPZT = '3' and ZOPERATION <> 'D' ",
+    "FIELDS":[{"FIELDNAME":"TOTAL","FIELDTYPE":"menge_d"}]}
+  getMsg: {
+    "SQL": "select MANDT,EBELN,BSART,BUKRS,EKORG,EKGRP,ZTERM,ERNAM,BEDAT,ZZMY,ZZFJ,WAERS,LIFNR,LIFNR_NAME,LIFNR_NAME2,ZZPO,ZZKH,ZZXM,ZZEJ,ZZYS,ZZFK,ZZCP,ZZZJY,ZZSBFD,ZZFWFD,ZZSQR,ZZTQXD,ZSPWC,ZOPERATION,ZSWRY,ZZSDPO,ZZXZT,(select u.NAME_TEXT from ZV_SAPUSER u where u.MANDT=zph.MANDT and u.BNAME=zph.ERNAM ) NAMETEXT,ZZSPZT,ZSBZJE,ZFWZJE FROM ZVMM_PO_HEADER zph WHERE MANDT = '%d' and ZZSPZT = '3' and ZOPERATION <> 'D' order by BEDAT desc  offset %d rows fetch next %d rows only",
+    "FIELDS":[{"FIELDNAME":"MANDT","FIELDTYPE":"MANDT"},
+              {"FIELDNAME":"EBELN","FIELDTYPE":"EBELN"},
+              {"FIELDNAME":"BSART","FIELDTYPE":"ESART"},
+              {"FIELDNAME":"BUKRS","FIELDTYPE":"BUKRS"},
+              {"FIELDNAME":"EKORG","FIELDTYPE":"EKORG"},
+              {"FIELDNAME":"EKGRP","FIELDTYPE":"BKGRP"},
+              {"FIELDNAME":"ZTERM","FIELDTYPE":"ZEFKTK"},
+              {"FIELDNAME":"ERNAM","FIELDTYPE":"ERNAM"},
+              {"FIELDNAME":"BEDAT","FIELDTYPE":"EBDAT"},
+              {"FIELDNAME":"ZZMY","FIELDTYPE":"ZEMY"},
+              {"FIELDNAME":"ZZFJ","FIELDTYPE":"ZEFJ"},
+              {"FIELDNAME":"WAERS","FIELDTYPE":"WAERS"},
+              {"FIELDNAME":"LIFNR","FIELDTYPE":"ELIFN"},
+              {"FIELDNAME":"LIFNR_NAME","FIELDTYPE":"AD_NAME1"},
+              {"FIELDNAME":"LIFNR_NAME2","FIELDTYPE":"AD_NAME2"},
+              {"FIELDNAME":"ZZPO","FIELDTYPE":"ZEPO"},
+              {"FIELDNAME":"ZZKH","FIELDTYPE":"ZEKH"},
+              {"FIELDNAME":"ZZXM","FIELDTYPE":"ZEXM"},
+              {"FIELDNAME":"ZZEJ","FIELDTYPE":"ZEEJ"},
+              {"FIELDNAME":"ZZYS","FIELDTYPE":"ZEYS"},
+              {"FIELDNAME":"ZZFK","FIELDTYPE":"ZEFK"},
+              {"FIELDNAME":"ZZCP","FIELDTYPE":"ZECP"},
+              {"FIELDNAME":"ZZZJY","FIELDTYPE":"ZEZJY"},
+              {"FIELDNAME":"ZZSBFD","FIELDTYPE":"ZESBFD"},
+              {"FIELDNAME":"ZZFWFD","FIELDTYPE":"ZEFWFD"},
+              {"FIELDNAME":"ZZSQR","FIELDTYPE":"ZESQR"},
+              {"FIELDNAME":"ZZTQXD","FIELDTYPE":"ZETQXD"},
+              {"FIELDNAME":"ZSPWC","FIELDTYPE":"ZESPWC"},
+              {"FIELDNAME":"ZOPERATION","FIELDTYPE":"ZEOPERATION"},
+              {"FIELDNAME":"ZSWRY","FIELDTYPE":"ZESWRY"},
+              {"FIELDNAME":"ZZSDPO","FIELDTYPE":"ZESDPO"},
+              {"FIELDNAME":"ZZXZT","FIELDTYPE":"ZEZXZT"},
+              {"FIELDNAME":"NAME_TEXT","FIELDTYPE":"NAMETEXT"},
+              {"FIELDNAME":"ZZSPZT","FIELDTYPE":"ZESPZT"},
+              {"FIELDNAME":"ZSBZJE","FIELDTYPE":"ZESBZJE"},
+              {"FIELDNAME":"ZFWZJE","FIELDTYPE":"ZEFWZJE"},
+    ]
+  }
+
+
+iepurchaseorder:
+  sleep: 0
+  id: id
+  level: 1
+  nodeName: PurchaseOrder
+  orderfields: []
+  fields: [
+  ['id','EBELN','string'],
+  #['contract_code','ZZCYPO','string'],
+  #['contract_fullcode','ZZCYPO','string'],
+  ['purchase_rate','WKURS','float'],
+  ['trade_mode','ZZMYFS','string'],
+  ['customs_officer','ZZGWRY','string'],
+  ['original_supplier','ZZCYVD','string'],
+  ['latest_delivery_date','ZZJHDA','string'],
+  ['customs_amount ','ZZBGJJ','float'],
+  ['settle_manner','ZZJSFS','string'],
+  ]
+  url: "http://{}/sap/api/query/common?sap-client={}"
+  getPage: {
+    "SQL":"SELECT COUNT(*) AS TOTAL FROM ZVMM_PO_JCK_HEAD WHERE MANDT = '%d' and ZZSPZT = '3' and ZOPERATION <> 'D' ",
+    "FIELDS":[{"FIELDNAME":"TOTAL","FIELDTYPE":"menge_d"}]}
+  getMsg: {
+    "SQL": "select MANDT,EBELN,LIFNR_NAME,LIFNR_NAME2,ZZPO,ZZKH,ZZCYPO,ZZMYFS,ZZJWSK,ZZSFHT,ZZGWRY,ZZCYVD,ZZSDPO,ZZJHDA,ZZBGJJ,ZZJSFS,ZZDHKA,ZZQYGB,ZZJWCP,ZZJWJH,ZZCP,ZZZJY,ZZSQR,LIFNR,BSART,BUKRS,EKORG,EKGRP,ERNAM,BEDAT,ZZMY,ZZFJ,WAERS,ZZXM,ZZTQXD,ZSPWC,ZZSPZT,ZOPERATION,ZSWRY,NAME_TEXT,WKURS FROM ZVMM_PO_JCK_HEAD  WHERE MANDT = '%d' and ZZSPZT = '3' and ZOPERATION <> 'D' order by EBELN desc  offset %d rows fetch next %d rows only",
+    "FIELDS":[{"FIELDNAME":"MANDT","FIELDTYPE":"MANDT"},
+    {"FIELDNAME":"EBELN","FIELDTYPE":"EBELN"},
+    {"FIELDNAME":"LIFNR_NAME","FIELDTYPE":"AD_NAME1"},
+    {"FIELDNAME":"LIFNR_NAME2","FIELDTYPE":"AD_NAME2"},
+    {"FIELDNAME":"ZZPO","FIELDTYPE":"ZEPO"},
+    {"FIELDNAME":"ZZKH","FIELDTYPE":"ZEKH"},
+    {"FIELDNAME":"ZZCYPO","FIELDTYPE":"ZECYPO"},
+    {"FIELDNAME":"ZZMYFS","FIELDTYPE":"ZEMYFS"},
+    {"FIELDNAME":"ZZJWSK","FIELDTYPE":"ZEJWSK"},
+    {"FIELDNAME":"ZZSFHT","FIELDTYPE":"ZESFHT"},
+    {"FIELDNAME":"ZZGWRY","FIELDTYPE":"ZEGWRY"},
+    {"FIELDNAME":"ZZCYVD","FIELDTYPE":"ZECYVD"},
+    {"FIELDNAME":"ZZSDPO","FIELDTYPE":"ZESDPO"},
+    {"FIELDNAME":"ZZJHDA","FIELDTYPE":"ZEJHDA"},
+    {"FIELDNAME":"ZZBGJJ","FIELDTYPE":"ZEBGJJ"},
+    {"FIELDNAME":"ZZJSFS","FIELDTYPE":"ZEJSFS"},
+    {"FIELDNAME":"ZZDHKA","FIELDTYPE":"ZEDHKA"},
+    {"FIELDNAME":"ZZQYGB","FIELDTYPE":"ZEQYGB"},
+    {"FIELDNAME":"ZZJWCP","FIELDTYPE":"ZEJWCP"},
+    {"FIELDNAME":"ZZJWJH","FIELDTYPE":"ZEJWJH"},
+    {"FIELDNAME":"ZZCP","FIELDTYPE":"ZECP"},
+    {"FIELDNAME":"ZZZJY","FIELDTYPE":"ZEZJY"},
+    {"FIELDNAME":"ZZSQR","FIELDTYPE":"ZESQR"},
+    {"FIELDNAME":"LIFNR","FIELDTYPE":"ELIFN"},
+    {"FIELDNAME":"BSART","FIELDTYPE":"ESART"},
+    {"FIELDNAME":"BUKRS","FIELDTYPE":"BUKRS"},
+    {"FIELDNAME":"EKORG","FIELDTYPE":"EKORG"},
+    {"FIELDNAME":"EKGRP","FIELDTYPE":"BKGRP"},
+    {"FIELDNAME":"ERNAM","FIELDTYPE":"ERNAM"},
+    {"FIELDNAME":"BEDAT","FIELDTYPE":"EBDAT"},
+    {"FIELDNAME":"ZZMY","FIELDTYPE":"ZEMY"},
+    {"FIELDNAME":"ZZFJ","FIELDTYPE":"ZEFJ"},
+    {"FIELDNAME":"WAERS","FIELDTYPE":"WAERS"},
+    {"FIELDNAME":"ZZXM","FIELDTYPE":"ZEXM"},
+    {"FIELDNAME":"ZZTQXD","FIELDTYPE":"ZETQXD"},
+    {"FIELDNAME":"ZSPWC","FIELDTYPE":"ZESPWC"},
+    {"FIELDNAME":"ZZSPZT","FIELDTYPE":"ZESPZT"},
+    {"FIELDNAME":"ZOPERATION","FIELDTYPE":"ZEOPERATION"},
+    {"FIELDNAME":"ZSWRY","FIELDTYPE":"ZESWRY"},
+    {"FIELDNAME":"NAME_TEXT","FIELDTYPE":"NAMETEXT"},
+    {"FIELDNAME":"WKURS","FIELDTYPE":"WKURS"},
+    ]
+  }
+
+
+# 客户
+customer:
+  sleep: 0
+  id: id
+  level: 1
+  nodeName: Customer
+  orderfields: []
+  fields: [
+    ['id','KUNNR','string'],
+    ['name','NAME1','string'],
+    ['type','KTOKD','string'],
+    ['city','ORT01','string'],
+    ['country_code','LAND1','string'],
+    ['province','REGIO','string'],
+    ['taxpayer_identification_number','STCEG','string'],
+  ]
+  url: "http://{}/sap/api/query/common?sap-client={}"
+  getPage: {
+      "SQL": "select COUNT(*) as TOTAL from  (select distinct a.KUNNR from ZVSD_CENTRAL a left join ZVSD_REGISTER b on a.KUNNR = b.KUNNR and a.MANDT = b.MANDT  left join KNB1 as c on  a.KUNNR = c.KUNNR and a.MANDT = c.MANDT where 1 = 1  and a.MANDT = %d ) as c",
+      "FIELDS": [{"FIELDNAME": "TOTAL","FIELDTYPE": "menge_d"}]}
+  getMsg: {
+      "SQL": "select distinct a.KUNNR,a.NAME1,a.NAME2,a.NAME3,a.NAME4,a.LAND1,a.ORT01,a.PSTLZ,a.REGIO,a.STRAS,a.TELF1,a.TELF2,a.TELFX,a.KTOKD,a.ZCREATE_BY,a.ZCREATE_NAME,a.ZCREATE_ORG,a.ZCREATE_ROLE,a.ZOPT_DATE,a.ZOPT_TIME,a.CCC04,d.STCEG from ZVSD_CENTRAL a left join ZVSD_REGISTER b on a.KUNNR = b.KUNNR and a.MANDT = b.MANDT left join KNB1 as c on  a.KUNNR = c.KUNNR and a.MANDT = c.MANDT   left join ZVSD_BANK as d on a.KUNNR = d.KUNNR and a.MANDT = d.MANDT  where 1 = 1 and a.MANDT = %d order by a.KUNNR desc offset %d rows fetch next %d rows only",
+      "FIELDS": [
+          {"FIELDNAME": "KUNNR","FIELDTYPE": "KUNNR"},
+          {"FIELDNAME": "NAME1","FIELDTYPE": "AD_NAME1"},
+          {"FIELDNAME": "NAME2","FIELDTYPE": "AD_NAME2"},
+          {"FIELDNAME": "NAME3","FIELDTYPE": "AD_NAME3"},
+          {"FIELDNAME": "NAME4","FIELDTYPE": "AD_NAME4"},
+          {"FIELDNAME": "LAND1","FIELDTYPE": "LAND1_GP"},
+          {"FIELDNAME": "ORT01","FIELDTYPE": "ORT01_GP"},
+          {"FIELDNAME": "PSTLZ","FIELDTYPE": "PSTLZ"},
+          {"FIELDNAME": "REGIO","FIELDTYPE": "REGIO"},
+          {"FIELDNAME": "STRAS","FIELDTYPE": "AD_STREET"},
+          {"FIELDNAME": "TELF1","FIELDTYPE": "TELF1"},
+          {"FIELDNAME": "TELF2","FIELDTYPE": "TELF2"},
+          {"FIELDNAME": "TELFX","FIELDTYPE": "TELFX"},
+          {"FIELDNAME": "KTOKD","FIELDTYPE": "KTOKD"},
+          {"FIELDNAME": "ZCREATE_BY","FIELDTYPE": "ZECREATE_BY"},
+          {"FIELDNAME": "ZCREATE_NAME","FIELDTYPE": "ZECREATE_NAME"},
+          {"FIELDNAME": "ZCREATE_ORG","FIELDTYPE": "ZECREATE_ORG"},
+          {"FIELDNAME": "ZCREATE_ROLE","FIELDTYPE": "ZECREATE_ROLE"},
+          {"FIELDNAME": "ZOPT_DATE","FIELDTYPE": "ZEOPT_DATE"},
+          {"FIELDNAME": "ZOPT_TIME","FIELDTYPE": "ZEOPT_TIME"},
+          {"FIELDNAME": "CCC04",   "FIELDTYPE": "CCC04"},
+          {"FIELDNAME":"STCEG","FIELDTYPE":"STCD5"},
+                  ]}
+
+# 到账
+account:
+  sleep: 0
+  id: id
+  level: 1
+  nodeName: ArrivalAccount
+  orderfields: []
+  fields: [
+  ['id','ZDZDBH','string'],
+  ['arrival_time','ZRZRQ','string'],
+  ['arrival_account','ZDZJE','float'],
+  ['offset_status','ZHX','string'],
+  ['arrival_type','ZSKLX','string'],
+  ['receivables_id','ZYWYSBH','string'],
+  ['customer_id','KUNNR','string'],
+  ]
+  url: "http://{}/sap/api/query/common?sap-client={}"
+  getPage: {
+      "SQL":"SELECT COUNT(*) AS TOTAL FROM ZVFI_DZD WHERE MANDT = '%s'  and ZHX = '3' ","FIELDS":[{"FIELDNAME":"TOTAL","FIELDTYPE":"menge_d"}],"TESTRUN":""}
+  getMsg: {
+      "SQL":"select  MANDT, ZDZDBH,ZJHDBH, VBELN, ZQXBH, ZYWYSBH, ZHX, DZZT, ZDZDLY, ZLYBH, ZRZRQ, KUNNR, NAME1, ZDZJE, ZSKZL, ZSKLX, ZBM, ZBZ, YSHM, WAERS, ZLSM, ZKUNNR, ZNAME, BUKRS FROM ZVFI_DZD WHERE MANDT = '%d'  and ZHX = '3'  order by ZDZDBH desc  offset %d rows fetch next %d rows only",
+      #"SQL":"select  A.MANDT, A.ZDZDBH,A.ZJHDBH,A.VBELN, A.ZQXBH, A.ZYWYSBH, A.ZHX, A.DZZT, A.ZDZDLY, A.ZLYBH, A.ZRZRQ, A.KUNNR, A.NAME1, A.ZDZJE, A.ZSKZL, A.ZSKLX, A.ZBM, A.ZBZ, A.YSHM, A.WAERS, A.ZLSM, A.ZKUNNR, A.ZNAME, A.BUKRS,B.STCEG FROM ZVFI_DZD as A LEFT JOIN ZVSD_BANK as B ON A.KUNNR = B.KUNNR AND A.MANDT = B.MANDT WHERE A.MANDT = '%d'  and A.ZHX = '3'  order by A.ZDZDBH desc  offset %d rows fetch next %d rows only",
+       "FIELDS":[
+          {"FIELDNAME":"MANDT","FIELDTYPE":"MANDT"},
+          {"FIELDNAME":"ZDZDBH","FIELDTYPE":"ZDZDBH"},
+          {"FIELDNAME":"ZJHDBH","FIELDTYPE":"ZJHDBH"},
+          {"FIELDNAME":"VBELN","FIELDTYPE":"VBELN"},
+          {"FIELDNAME":"ZQXBH","FIELDTYPE":"ZQXBH"},
+          {"FIELDNAME":"ZYWYSBH","FIELDTYPE":"ZYWYSBH"},
+          {"FIELDNAME":"ZHX","FIELDTYPE":"ZHX"},
+          {"FIELDNAME":"DZZT","FIELDTYPE":"ZEDZZT"},
+          {"FIELDNAME":"ZDZDLY","FIELDTYPE":"ZDZDLY"},
+          {"FIELDNAME":"ZLYBH","FIELDTYPE":"ZLYBH"},
+          {"FIELDNAME":"ZRZRQ","FIELDTYPE":"ZRZRQ"},
+          {"FIELDNAME":"KUNNR","FIELDTYPE":"KUNNR"},
+          {"FIELDNAME":"NAME1","FIELDTYPE":"NAME1"},
+          {"FIELDNAME":"ZDZJE","FIELDTYPE":"ZDZJE"},
+          {"FIELDNAME":"ZSKZL","FIELDTYPE":"ZSKZL"},
+          {"FIELDNAME":"ZSKLX","FIELDTYPE":"ZSKLX"},
+          {"FIELDNAME":"ZBM","FIELDTYPE":"ZBM"},
+          {"FIELDNAME":"ZBZ","FIELDTYPE":"ZBZ"},
+          {"FIELDNAME":"YSHM","FIELDTYPE":"ZEYSHM"},
+          {"FIELDNAME":"WAERS","FIELDTYPE":"WAERS"},
+          {"FIELDNAME":"ZLSM","FIELDTYPE":"ZELSM"},
+          {"FIELDNAME":"ZKUNNR","FIELDTYPE":"KUNNR"},
+          {"FIELDNAME":"ZNAME","FIELDTYPE":"NAME"},
+          {"FIELDNAME":"BUKRS","FIELDTYPE":"BUKRS"},
+          ] ,"TESTRUN":""}
+
+
+# 应收
+receivable:
+  sleep: 0
+  id: id
+  level: 1
+  nodeName: Receivables
+  orderfields: []
+  fields: [
+  ['id','ZYWYS','string'],
+  ['customer_id','KUNNR','string'],
+  ['customer_name','NAME1','string'],
+  ['department','ZCREATE_ORG','string'],
+  ['salesperson_name','ZPERNR_NAME','string'],
+  ['sources','ZYSLY','string'],
+  ['delivery_order_id','VBELN_VL','string'],
+  ['receivables_account','ZYSJE','float'],
+  ['already_offset_account','ZHXJE','float'],
+  ['future_offset_account','WHXJE','float'],
+  ['start_time','ZQSRQ','string'],
+  ['account_period','ZZL','float'],
+  ['sale_contract_id','ZBSTKD','string'],
+  ]
+  url: "http://{}/sap/api/query/ar?sap-client={}"
+  getMsg: {"ZCQBS":"EQ","PAGENO":1,"PAGESIZE":200,"TESTRUN":""}
+
+
+#放货
+productouts:
+  sleep: 0
+  id: id
+  level: 1
+  nodeName: DeliverGoods
+  orderfields: []
+  fields: [
+    ['id','code','string'],
+    ['transport_manner','dest.transtype','string'],
+    ['out_warehouse_manner','dest.cargoouttype','string'],
+    ['goods_account','money','float'],
+    ['deliver_state','info.status','string'],
+    ['sale_contract_code','contract.code','string'],
+    ['sap_code','sapcode','string'],
+  ]
+  pattern: {}
+  show: {}
+  collection: productouts
+
+
+
+# 销售合同
+contract:
+  sleep: 0
+  id: id
+  level: 1
+  nodeName: SaleContract
+  orderfields: []
+  fields: [
+    ['id','contractbase.groupno','string'],
+    ['code','contractbase.contractno','string'],
+    ['type','contractbase.contracttype','string'],
+    ['account','contractbase.contractmoney','float'],
+    ['customer_name','contractbase.stomer','string'],
+    ['customer_id','contractbase.stomerid','string'],
+    ['salesperson_name','contractbase.salesname','string'],
+    ['salesperson_id','contractbase.salesid','string'],
+    ['business_unit','contractbase.salesorgnanme2','string'],
+    #['effect_date','contractbase.effectdate2','utctime'],时间格式太乱
+    ['project_name','contractbase.project','string'],
+    ['final_customer_name','contractbase.finalconsumer','string'],
+    ['company_profit_has_tax','changeProfitData.interestContainTax','float'],
+    ['company_profit_no_tax','changeProfitData.interest','float'],
+    ['company_contract_profit_rate','changeProfitData.contractInterest','float'],
+    ['sale_profit_has_tax','changeProfitData.sellinterestContainTax','float'],
+    ['sale_profit_no_tax','changeProfitData.sellinterest','float'],
+    ['sale_profit_rate','changeProfitData.sellcontractInterest ','float'],
+  ]
+  collection: contracts
+  show: {}
+  unique: code
+  findKey: contractbase.contractno
+  pattern : [{"$match": {"contractbase.status":20,"contractbase.cancelStatus":{"$ne":-20}}},{"$group":{"_id": "$contractbase.groupno", "code":{"$max":"$contractbase.contractno"}}}]
+
+
+
+cuscredit:
+  sleep: 0
+  id: id
+  level: 1
+  nodeName: CustomerCredit
+  orderfields: []
+  fields: [
+    ['id','cuscode','string'],
+    ['credit_rating','xydj','string'],
+    ['credit_account','creditmoney','float'],
+    ['company_size','companysize','float'],
+    ['business_place','premises','float'],
+    ['public_praise','industryreputation','float'],
+    ['expect_year_trade_money','yqnjyed','float'],
+    ['is_know_leader','ydfgcsfss','float'],
+    ['customer_source','cussource','float'],
+    ['customer_trade_target_grade','khjydxdjxz','float'],
+    ]
+  pattern: {}
+  show: {}
+  collection: cuscredits
+
+
+cuscomment:
+  sleep: 0
+  id: id
+  level: 1
+  nodeName: CustomerHistoryComment
+  orderfields: []
+  fields: [
+  ['id','cuscode','string'],
+  ['history_comment','comments','stringlist'],
+  ]
+  pattern: {}
+  show: {}
+  collection: cuscomments
+
